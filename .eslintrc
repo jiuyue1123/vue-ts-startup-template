@@ -1,0 +1,6 @@
+{
+  "extends": ["eslint-config-ali/typescript/vue", ".eslintrc-auto-import.json"],
+  "parserOptions": {
+    "project": ["tsconfig.json", "tsconfig.node.json", "tsconfig.app.json"],
+  },
+}
