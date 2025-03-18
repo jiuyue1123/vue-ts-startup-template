@@ -23,6 +23,8 @@
     "@elegant-router/vue": "^0.3.8",
     "@element-plus/icons-vue": "^2.3.1",
     "@types/node": "^22.13.10",
+    "@vueuse/core": "^13.0.0",
+    "alova": "^3.2.10",
     "element-plus": "^2.9.6",
     "vue": "^3.5.13",
     "vue-router": "4"

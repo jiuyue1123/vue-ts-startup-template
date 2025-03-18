@@ -19,6 +19,9 @@ declare module "@elegant-router/types" {
     "not-found": "/:pathMatch(.*)*";
     "404": "/404";
     "home": "/home";
+    "test": "/test";
+    "test_test1": "/test/test1";
+    "test_test2": "/test/test2";
   };
 
   /**
@@ -52,6 +55,7 @@ declare module "@elegant-router/types" {
     RouteKey,
     | "404"
     | "home"
+    | "test"
   >;
 
   /**
@@ -70,6 +74,8 @@ declare module "@elegant-router/types" {
     RouteKey,
     | "404"
     | "home"
+    | "test_test1"
+    | "test_test2"
   >;
 
   /**
