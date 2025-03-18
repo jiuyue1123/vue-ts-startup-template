@@ -1,5 +1,5 @@
 <template>
-  <div class="layout" :class="currentTheme">
+  <div class="layout">
     <ElContainer>
       <ElAside :width="isCollapse ? '64px' : '240px'" class="aside">
         <div class="menu-container">
@@ -16,17 +16,54 @@
       <ElContainer>
         <ElHeader height="60px" class="header">
           <div class="header-content">
-            <h2>{{ appTitle }}</h2>
+            <h2>{{ currentRouteTitle }}</h2>
             <div class="header-actions">
               <div class="theme-switch">
                 <ElTooltip content="切换主题" placement="bottom">
                   <ElButton circle size="small" @click="toggleTheme">
                     <ElIcon>
-                      <Moon v-if="currentTheme === 'dark-theme'" />
+                      <Moon v-if="isDarkMode" />
                       <Sunny v-else />
                     </ElIcon>
                   </ElButton>
                 </ElTooltip>
+              </div>
+
+              <!-- 用户头像和下拉菜单 -->
+              <div class="user-dropdown" v-if="authStore.isLoggedIn">
+                <ElDropdown trigger="click" @command="handleCommand">
+                  <div class="user-card">
+                    <ElAvatar :size="32" :src="userAvatar">
+                      {{ userInitials }}
+                    </ElAvatar>
+                    <span class="username">{{ userName }}</span>
+                    <ElIcon class="dropdown-icon">
+                      <ArrowDown />
+                    </ElIcon>
+                  </div>
+                  <template #dropdown>
+                    <ElDropdownMenu>
+                      <ElDropdownItem command="profile">
+                        <ElIcon>
+                          <User />
+                        </ElIcon>
+                        <span>个人资料</span>
+                      </ElDropdownItem>
+                      <ElDropdownItem command="settings">
+                        <ElIcon>
+                          <Setting />
+                        </ElIcon>
+                        <span>设置</span>
+                      </ElDropdownItem>
+                      <ElDropdownItem divided command="logout">
+                        <ElIcon>
+                          <SwitchButton />
+                        </ElIcon>
+                        <span>退出登录</span>
+                      </ElDropdownItem>
+                    </ElDropdownMenu>
+                  </template>
+                </ElDropdown>
               </div>
             </div>
           </div>
@@ -40,101 +77,104 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { ArrowLeft, Moon, Sunny } from '@element-plus/icons-vue';
+import { ref, onMounted, computed, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { ElMessage, ElMessageBox } from 'element-plus';
+import {
+  ArrowLeft,
+  Moon,
+  Sunny,
+  User,
+  Setting,
+  SwitchButton,
+  ArrowDown,
+} from '@element-plus/icons-vue';
 import GlobalMenu from '../modules/global-menu.vue';
-import { getStoredTheme, setTheme } from '../../utils/theme';
+import { getStoredTheme, setTheme, isDarkMode } from '@/utils/theme';
+import { useAuthStore } from '@/stores';
+
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
 
 const isCollapse = ref(false);
 const appTitle = ref('Vue TS App');
-const currentTheme = ref(getStoredTheme());
+
+// 当前路由标题
+const currentRouteTitle = computed(() => {
+  return route.meta.title || appTitle.value;
+});
+
+// 监听路由变化，更新标题
+watch(
+  () => route.path,
+  () => {
+    document.title = currentRouteTitle.value;
+  },
+  { immediate: true },
+);
+
+// 用户信息计算属性
+const userName = computed(() => {
+  return authStore.userInfo?.username || '未登录';
+});
+
+const userAvatar = computed(() => {
+  return authStore.userInfo?.avatar || '';
+});
+
+const userInitials = computed(() => {
+  if (!authStore.userInfo?.username) return '';
+  return authStore.userInfo.username.slice(0, 2).toUpperCase();
+});
 
 function toggleCollapse() {
   isCollapse.value = !isCollapse.value;
 }
 
 function toggleTheme() {
-  currentTheme.value = currentTheme.value === 'light-theme' ? 'dark-theme' : 'light-theme';
-  setTheme(currentTheme.value);
+  // 在亮色和暗色主题之间切换
+  const newTheme = isDarkMode.value ? 'light-theme' : 'dark-theme';
+  setTheme(newTheme);
 }
 
-onMounted(() => {
-  setTheme(currentTheme.value);
-});
+// 处理下拉菜单命令
+function handleCommand(command: string) {
+  switch (command) {
+    case 'profile':
+      router.push('/profile');
+      break;
+    case 'settings':
+      router.push('/settings');
+      break;
+    case 'logout':
+      handleLogout();
+      break;
+  }
+}
+
+// 退出登录
+function handleLogout() {
+  ElMessageBox.confirm('确定要退出登录吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
+      authStore.logout();
+      ElMessage.success('已成功退出登录');
+      router.push('/login');
+    })
+    .catch(() => {
+      // 取消退出
+    });
+}
+
+// 注意: 不需要在这里初始化主题，因为App.vue中已经做了
 </script>
 
 <style>
-:root {
-  /* Light Theme - Based on Ant Design color palette */
-  --primary-color: #1890ff;
-  --primary-hover: #40a9ff;
-  --primary-active: #096dd9;
-  --primary-light: #e6f7ff;
-
-  /* Background colors */
-  --bg-color: #f0f2f5;
-  --component-bg: #ffffff;
-  --header-bg: #ffffff;
-
-  /* Menu colors */
-  --menu-bg: #001529;
-  --menu-text: rgba(255, 255, 255, 0.85);
-  --menu-text-secondary: rgba(255, 255, 255, 0.65);
-  --menu-active-text: #ffffff;
-  --menu-active-bg: #1890ff;
-  --menu-hover-bg: #000c17;
-  --menu-submenu-bg: #000c17;
-
-  /* Text colors */
-  --text-primary: rgba(0, 0, 0, 0.85);
-  --text-secondary: rgba(0, 0, 0, 0.65);
-  --text-hint: rgba(0, 0, 0, 0.45);
-
-  /* Border colors */
-  --border-color: #d9d9d9;
-  --split-color: rgba(0, 0, 0, 0.06);
-
-  /* Other elements */
-  --shadow-color: rgba(0, 0, 0, 0.15);
-  --collapse-btn-bg: #1890ff;
-  --collapse-btn-hover: #40a9ff;
-}
-
-.dark-theme {
-  /* Dark Theme - Based on Ant Design dark palette */
-  --primary-color: #177ddc;
-  --primary-hover: #1890ff;
-  --primary-active: #0050b3;
-  --primary-light: #111b26;
-
-  /* Background colors */
-  --bg-color: #141414;
-  --component-bg: #1f1f1f;
-  --header-bg: #1f1f1f;
-
-  /* Menu colors */
-  --menu-bg: #141414;
-  --menu-text: rgba(255, 255, 255, 0.85);
-  --menu-text-secondary: rgba(255, 255, 255, 0.65);
-  --menu-active-text: #ffffff;
-  --menu-active-bg: #177ddc;
-  --menu-hover-bg: #1f1f1f;
-  --menu-submenu-bg: #000000;
-
-  /* Text colors */
-  --text-primary: rgba(255, 255, 255, 0.85);
-  --text-secondary: rgba(255, 255, 255, 0.65);
-  --text-hint: rgba(255, 255, 255, 0.45);
-
-  /* Border colors */
-  --border-color: #434343;
-  --split-color: rgba(255, 255, 255, 0.12);
-
-  /* Other elements */
-  --shadow-color: rgba(0, 0, 0, 0.45);
-  --collapse-btn-bg: #177ddc;
-  --collapse-btn-hover: #1890ff;
-}
+/* 移除重复的CSS变量定义，样式已经在全局变量文件中定义 */
 </style>
 
 <style scoped>
@@ -185,7 +225,7 @@ onMounted(() => {
   align-items: center;
   cursor: pointer;
   color: #fff;
-  background-color: var(--collapse-btn-bg);
+  background-color: var(--primary-color);
   box-shadow: 0 2px 8px var(--shadow-color);
   transition:
     transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
@@ -195,7 +235,7 @@ onMounted(() => {
 }
 
 .collapse-btn:hover {
-  background-color: var(--collapse-btn-hover);
+  background-color: var(--primary-hover);
   transform: translateY(-50%) scale(1.1);
   box-shadow: 0 4px 12px var(--shadow-color);
 }
@@ -218,8 +258,8 @@ onMounted(() => {
   transition:
     background-color 0.3s,
     box-shadow 0.3s;
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-color);
+  color: white;
+  border-bottom: 1px solid transparent;
 }
 
 .header-content {
@@ -234,7 +274,7 @@ onMounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: white;
   transition: color 0.3s;
 }
 
@@ -245,6 +285,78 @@ onMounted(() => {
 
 .theme-switch {
   margin-left: 16px;
+}
+
+.theme-switch .el-button {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  transition: all 0.3s;
+}
+
+.theme-switch .el-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.theme-switch .el-button:active {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.user-dropdown {
+  margin-left: 16px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 24px;
+  transition: all 0.3s;
+  background-color: var(--user-card-bg);
+}
+
+.user-card:hover {
+  background-color: var(--user-card-hover);
+  transform: translateY(-1px);
+}
+
+.username {
+  margin: 0 8px;
+  font-size: 14px;
+  color: var(--user-text-color);
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+  text-shadow: 0 1px 2px var(--shadow-color);
+}
+
+.dropdown-icon {
+  font-size: 12px;
+  color: var(--user-text-color);
+}
+
+:deep(.el-dropdown-menu__item) {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+:deep(.el-dropdown-menu__item .el-icon) {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+:deep(.el-avatar) {
+  background-color: var(--primary-active);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .main-content {
@@ -313,12 +425,17 @@ onMounted(() => {
 
 .menu-container::-webkit-scrollbar-thumb,
 .main-content::-webkit-scrollbar-thumb {
-  background-color: var(--text-hint);
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
 }
 
 .menu-container::-webkit-scrollbar-track,
 .main-content::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+.main-content::-webkit-scrollbar-thumb {
+  background-color: var(--text-secondary);
+  border-radius: 4px;
 }
 </style>

@@ -10,25 +10,52 @@ export const generatedRoutes: GeneratedRoute[] = [
     path: '/404',
     component: 'layout.base$view.404',
     meta: {
-      title: '404',
-      hideInMenu: true,
-    },
+      title: '页面不存在',
+      hideInMenu: true
+    }
   },
   {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',
     meta: {
-      title: 'home',
-      icon: 'HomeFilled',
-    },
+      title: '首页',
+      icon: 'HomeFilled'
+    }
+  },
+  {
+    name: 'login',
+    path: '/login',
+    component: 'layout.blank$view.login',
+    meta: {
+      title: '登录',
+      hideInMenu: true
+    }
+  },
+  {
+    name: 'profile',
+    path: '/profile',
+    component: 'layout.base$view.profile',
+    meta: {
+      title: '个人资料',
+      hideInMenu: true
+    }
+  },
+  {
+    name: 'settings',
+    path: '/settings',
+    component: 'layout.base$view.settings',
+    meta: {
+      title: '系统设置',
+      hideInMenu: true
+    }
   },
   {
     name: 'test',
     path: '/test',
     component: 'layout.base',
     meta: {
-      title: 'test',
+      title: '测试页面'
     },
     children: [
       {
@@ -36,17 +63,17 @@ export const generatedRoutes: GeneratedRoute[] = [
         path: '/test/test1',
         component: 'view.test_test1',
         meta: {
-          title: 'test_test1',
-        },
+          title: '测试页面1'
+        }
       },
       {
         name: 'test_test2',
         path: '/test/test2',
         component: 'view.test_test2',
         meta: {
-          title: 'test_test2',
-        },
-      },
-    ],
-  },
+          title: '测试页面2'
+        }
+      }
+    ]
+  }
 ];

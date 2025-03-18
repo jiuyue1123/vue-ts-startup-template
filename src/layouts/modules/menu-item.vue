@@ -214,10 +214,12 @@ function navigateTo(to: RouteLocationRaw) {
   font-size: 18px;
   transition:
     color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
-    margin 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    margin 0.3s cubic-bezier(0.645, 0.045, 0.355, 1),
+    opacity 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   transform: translateZ(0);
-  will-change: color, margin;
+  will-change: color, margin, opacity;
   -webkit-font-smoothing: antialiased;
+  opacity: 0.85;
 }
 
 .menu-title {
@@ -233,6 +235,7 @@ function navigateTo(to: RouteLocationRaw) {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: inline-block;
+  letter-spacing: 0.2px;
 }
 
 :deep(.el-menu--popup) {
@@ -286,9 +289,15 @@ function navigateTo(to: RouteLocationRaw) {
   color: var(--menu-active-text);
 }
 
+:deep(.el-menu-item:hover .menu-icon),
+:deep(.el-submenu__title:hover .menu-icon) {
+  opacity: 1;
+}
+
 :deep(.el-menu-item.is-active .menu-icon),
 :deep(.el-submenu.is-active .menu-icon) {
   color: var(--menu-active-text);
+  opacity: 1;
 }
 
 /* Prevent flicker during transitions */

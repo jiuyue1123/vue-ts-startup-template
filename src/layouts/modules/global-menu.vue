@@ -40,6 +40,7 @@ export default defineComponent({
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { RouteRecordRaw, RouteRecordNormalized } from 'vue-router';
+import { isDarkMode } from '@/utils/theme';
 
 const props = defineProps({
   isCollapse: {
@@ -135,11 +136,12 @@ function handleSelect(index: string) {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   overflow: hidden;
   margin-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .logo-text {
-  color: var(--primary-color);
+  color: white;
   font-size: 18px;
   font-weight: bold;
   margin: 0;
@@ -149,6 +151,7 @@ function handleSelect(index: string) {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   will-change: transform, opacity;
   transform: translateZ(0);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .logo-text.small {
@@ -181,6 +184,7 @@ function handleSelect(index: string) {
   border-radius: 0 22px 22px 0;
   z-index: -1;
   transition: background-color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 :deep(.el-menu-item.is-active),
