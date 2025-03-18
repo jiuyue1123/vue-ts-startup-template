@@ -12,7 +12,7 @@
 
 ### 近期计划
 
-- [ ] 完善主题切换功能，添加自定义主题定制能力
+- [x] 完善主题切换功能，添加自定义主题定制能力
 - [ ] 优化侧边菜单组件，添加权限控制功能
 - [ ] 实现全局消息通知系统
 - [ ] 添加常用表单组件和验证逻辑
@@ -33,7 +33,7 @@
 
 ## ✨ 特性
 
-- 🎨 **主题切换系统** - 内置亮色/暗色主题切换功能，支持自定义主题变量
+- 🎨 **主题切换系统** - 内置亮色/暗色主题切换功能，支持自定义主题变量和颜色
 - 📱 **响应式设计** - 自适应布局，从移动设备到大屏幕显示器
 - 🧩 **企业级组件** - 基于 Element Plus 的高质量组件库
 - 🚀 **快速开发** - Vite 提供极速的热更新和构建
@@ -83,47 +83,74 @@ src/
 │   └── modules/         # 布局模块组件
 ├── router/        # 路由配置
 ├── service/       # API 服务和请求
+├── styles/        # 全局样式和变量
+│   └── variables.css    # CSS变量定义
 ├── typings/       # TypeScript 类型定义
 ├── utils/         # 工具函数
 │   └── theme.ts   # 主题切换工具
 ├── views/         # 页面视图
+│   ├── settings/       # 系统设置
+│   └── profile/        # 个人资料
 ├── App.vue        # 根组件
-├── main.ts        # 入口文件
-└── style.css      # 全局样式
+└── main.ts        # 入口文件
 ```
 
 ## 🎨 主题系统
 
-项目内置了亮色和暗色两套主题，通过 CSS 变量实现，支持无缝切换：
+项目提供了完善的主题管理系统，包括亮色/暗色主题切换、主题色自定义、以及动画效果控制：
+
+### 主题模式
+
+支持三种主题模式：
+
+- 亮色模式
+- 暗色模式
+- 自动模式（跟随系统偏好设置）
+
+### 主题色自定义
+
+提供多种预设主题色，也支持自定义颜色：
+
+- 蓝色 (#409EFF)
+- 青色 (#36B4C1)
+- 绿色 (#67C23A)
+- 橙色 (#E09A43)
+- 红色 (#E05D5D)
+- 紫色 (#7952B3)
+- 黑色 (#303133)
+
+### 主题变量
+
+通过 CSS 变量实现主题切换，支持统一管理：
 
 ```css
-/* 亮色主题 */
 :root {
-  --primary-color: #1890ff;
-  --bg-color: #f0f2f5;
-  --text-primary: rgba(0, 0, 0, 0.85);
+  --primary-color: #409eff;
+  --bg-color: #f5f7fa;
+  --text-primary: #303133;
   /* 更多变量... */
 }
 
-/* 暗色主题 */
-.dark-theme {
-  --primary-color: #177ddc;
+html.dark {
+  --primary-color: #409eff;
   --bg-color: #141414;
-  --text-primary: rgba(255, 255, 255, 0.85);
+  --text-primary: #e5eaf3;
   /* 更多变量... */
 }
 ```
 
-使用 `toggleTheme()` 函数可在任何组件中切换主题：
+### 动态主题色
+
+系统会自动生成主题色的衍生色，包括悬停、激活等状态的颜色，确保视觉协调性：
 
 ```typescript
-import { getStoredTheme, setTheme } from '@/utils/theme';
+// 获取主题设置
+const theme = getStoredTheme();
+const themeVars = getStoredThemeVars();
 
-// 切换主题
-function toggleTheme() {
-  const theme = getStoredTheme() === 'light-theme' ? 'dark-theme' : 'light-theme';
-  setTheme(theme);
-}
+// 应用主题设置
+setTheme(theme);
+setThemeVars(themeVars);
 ```
 
 ## 📱 布局系统
@@ -134,6 +161,16 @@ function toggleTheme() {
 - **空白布局 (BlankLayout)**: 无任何预设内容的空白页面
 
 侧边栏支持折叠功能，点击折叠按钮可切换宽窄两种模式。
+
+## 🛠️ 系统设置
+
+系统设置页面提供了丰富的配置选项：
+
+- **通用设置**：默认主页、语言、时区、日期格式等
+- **外观与主题**：主题模式、主题色、菜单紧凑模式、动画效果等
+- **通知设置**：系统通知、消息提醒、任务提醒、邮件摘要等
+- **隐私设置**：数据收集、个人资料可见性、在线状态、搜索历史等
+- **辅助功能**：字体大小、对比度、减弱动画、键盘导航等
 
 ## 🧩 主要依赖
 
