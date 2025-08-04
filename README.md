@@ -39,6 +39,22 @@
   - 主题定制支持
   - 国际化支持
 
+### 🛠️ 工具库
+
+- **实用工具函数** - 常用的工具函数库
+  - **时间处理** - `prettyTime` 智能时间格式化
+  - **文件操作** - `useFileSelect` 文件选择器
+  - **加载状态** - `useFullscreenLoading` 全屏加载
+  - **本地存储** - `storage` 带过期时间的存储管理
+  - **防抖函数** - `useDebounce` 性能优化的防抖处理
+  - **设备信息** - `deviceInfo` 完整的设备环境检测
+  - **错误处理** - `errorHandle` 统一的错误处理机制
+  - **文件转换** - `fileToBase64` 文件转Base64
+  - **复制功能** - `copy` 剪贴板复制
+  - **货币格式化** - `formatCurrency` 货币显示格式化
+  - **文件下载** - `download` 文件下载工具
+  - **脚本加载** - `loadScript` 动态脚本加载
+
 ### 📦 构建工具
 
 - **Vite** - 极速的开发服务器和构建工具
@@ -106,6 +122,7 @@ vue-ts-startup-template/
 │   │   ├── elegant-router.d.ts # 路由类型
 │   │   ├── typed-router.d.ts # 类型化路由
 │   │   └── vite-env.d.ts     # Vite 环境类型
+│   ├── utils/                 # 工具函数库
 │   ├── views/                 # 页面组件
 │   │   ├── 403/              # 403 错误页
 │   │   ├── 404/              # 404 错误页
@@ -157,6 +174,11 @@ vue-ts-startup-template/
 - ✅ 热重载开发环境
 - ✅ 生产构建优化
 - ✅ 模块化 TypeScript 配置
+- ✅ 常用的工具函数库
+- ✅ 设备环境检测
+- ✅ 文件操作工具
+- ✅ 本地存储管理
+- ✅ 性能优化工具
 
 ## 📝 使用建议
 
