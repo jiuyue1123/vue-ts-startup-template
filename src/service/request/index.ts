@@ -33,7 +33,7 @@ function createFlatRequest() {
   // 通用请求方法
   async function request<R>(method: Method): Promise<FlatResponse<R>> {
     try {
-      const json = (await baseInstance.Request(method)) as Partial<App.Service.Response<R>>;
+      const json = (await method) as Partial<App.Service.Response<R>>;
       const { code, data, msg } = json || {};
       if (isSuccessCode(code as string)) {
         return { data: data ?? null, error: null };
