@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { layouts, views } from './_generated/imports';
 import { routes } from './_generated/routes';
 import { transformToVueRoutes } from './_generated/transformer';
+import { setupRouterGuards } from './guard';
 
 // 转换路由
 const vueRoutes = transformToVueRoutes(routes, layouts, views);
@@ -15,4 +16,5 @@ const router = createRouter({
 
 export const steupRouter = (app: App) => {
   app.use(router);
+  setupRouterGuards(router);
 };

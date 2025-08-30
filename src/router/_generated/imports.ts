@@ -7,15 +7,15 @@
 import type { RouteFileKey, RouteLayoutKey, RawRouteComponent } from "@elegant-router/types";
 
 export const layouts: Record<RouteLayoutKey, RawRouteComponent> = {
-  base: () => import('D:/project/front/vue-ts-startup-template/src/layouts/base/index.vue'),
-  blank: () => import('D:/project/front/vue-ts-startup-template/src/layouts/blank/index.vue'),
+  base: () => import('D:/project/vue-ts-startup-template/src/layouts/base/index.vue'),
+  blank: () => import('D:/project/vue-ts-startup-template/src/layouts/blank/index.vue'),
 };
 
 export const views: Record<RouteFileKey, RawRouteComponent> = {
-  403: () => import('D:/project/front/vue-ts-startup-template/src/views/403/index.vue'),
-  404: () => import('D:/project/front/vue-ts-startup-template/src/views/404/index.vue'),
-  500: () => import('D:/project/front/vue-ts-startup-template/src/views/500/index.vue'),
-  Home: () => import('D:/project/front/vue-ts-startup-template/src/views/home/index.vue'),
-  Login: () => import('D:/project/front/vue-ts-startup-template/src/views/login/index.vue'),
-  Test: () => import('D:/project/front/vue-ts-startup-template/src/views/test/index.vue'),
+  403: () => import('D:/project/vue-ts-startup-template/src/views/403/index.vue'),
+  404: () => import('D:/project/vue-ts-startup-template/src/views/404/index.vue'),
+  500: () => import('D:/project/vue-ts-startup-template/src/views/500/index.vue'),
+  Home: () => import('D:/project/vue-ts-startup-template/src/views/home/index.vue'),
+  Login: () => import('D:/project/vue-ts-startup-template/src/views/login/index.vue'),
+  Test: () => import('D:/project/vue-ts-startup-template/src/views/test/index.vue'),
 };

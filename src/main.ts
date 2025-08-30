@@ -5,10 +5,13 @@ import 'virtual:uno.css';
 import { createApp } from 'vue';
 import App from './App.vue';
 import { steupRouter } from './router';
+import { setupStore } from './store';
 import './style.css';
 import { setupErrorHandler } from './utils';
 
 const app = createApp(App);
+setupStore(app);
+
 app.use(setupErrorHandler);
 
 steupRouter(app);

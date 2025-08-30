@@ -41,6 +41,9 @@ export const routes: AutoRouterRoute[] = [
     path: '/home',
     layout: 'base',
     component: 'Home',
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     name: 'Login',
